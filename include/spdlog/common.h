@@ -9,23 +9,18 @@
 
 #include <atomic>
 
-#if defined(__MINGW32__)
+#if !_GLIBCXX_HAS_GTHREADS
 # define SPDLOG_USE_BOOST_THREAD
-# define SPDLOG_USE_BOOST_CHRONO
 #endif
 
-#if defined(SPDLOG_USE_BOOST_THREAD)
-# define SPDLOG_USE_BOOST_CHRONO
-# include <boost/thread.hpp>
-#else
+#if _GLIBCXX_HAS_GTHREADS
 # include <mutex>
 # include <thread>
 # include <condition_variable>
-#endif
-#if defined(SPDLOG_USE_BOOST_CHRONO)
-# include <boost/chrono.hpp>
-#else
 # include <chrono>
+#else
+# include <boost/thread.hpp>
+# include <boost/chrono.hpp>
 #endif
 
 #include <functional>
@@ -33,6 +28,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <vector>
 #include <unordered_map>
 
 #if defined(SPDLOG_WCHAR_FILENAMES) || defined(SPDLOG_WCHAR_TO_UTF8_SUPPORT)
@@ -87,6 +83,7 @@ namespace details {
 using boost::recursive_mutex;
 using boost::lock_guard;
 using boost::mutex;
+namespace chrono = boost::chrono;
 #else
 namespace details {
     using std::condition_variable;
@@ -96,14 +93,9 @@ namespace details {
 using std::recursive_mutex;
 using std::lock_guard;
 using std::mutex;
-#endif
-
-// choose chrono implementation
-#if defined(SPDLOG_USE_BOOST_CHRONO)
-namespace chrono = boost::chrono;
-#else
 namespace chrono = std::chrono;
 #endif
+
 
 using log_clock = chrono::system_clock;
 using sink_ptr = std::shared_ptr<sinks::sink>;
