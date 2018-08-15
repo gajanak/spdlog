@@ -38,7 +38,7 @@ protected:
     void flush_() override {}
 };
 
-using msvc_sink_mt = msvc_sink<std::mutex>;
+using msvc_sink_mt = msvc_sink<mutex>;
 using msvc_sink_st = msvc_sink<details::null_mutex>;
 
 using windebug_sink_mt = msvc_sink_mt;
