@@ -103,6 +103,12 @@ public:
 
 #endif
 
+    size_t overrun_counter()
+    {
+        std::unique_lock<std::mutex> lock(queue_mutex_);
+        return q_.overrun_counter();
+    }
+
 private:
     mutex queue_mutex_;
     condition_variable push_cv_;
