@@ -105,7 +105,7 @@ public:
 
     size_t overrun_counter()
     {
-        std::unique_lock<std::mutex> lock(queue_mutex_);
+        unique_lock<mutex> lock(queue_mutex_);
         return q_.overrun_counter();
     }
 
