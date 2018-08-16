@@ -140,6 +140,7 @@ inline const char *to_short_c_str(spdlog::level::level_enum l)
 {
     return short_level_names[l];
 }
+
 inline spdlog::level::level_enum from_str(const std::string &name)
 {
     static std::unordered_map<std::string, level_enum> name_to_level = // map string->level
@@ -175,14 +176,15 @@ class spdlog_ex : public std::runtime_error
 {
 public:
     explicit spdlog_ex(const std::string &msg)
-        : runtime_error(msg)
+        : std::runtime_error(msg)
     {
     }
+
     spdlog_ex(const std::string &msg, int last_errno)
-        : runtime_error([&](){
-            fmt::memory_buffer buf;
-            fmt::format_system_error(buf, last_errno, msg);
-            return fmt::to_string(buf);
+        : std::runtime_error([&](){
+        fmt::memory_buffer outbuf;
+        fmt::format_system_error(outbuf, last_errno, msg);
+        return fmt::to_string(outbuf);
         }())
     {
     }

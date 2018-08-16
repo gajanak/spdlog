@@ -4,7 +4,7 @@
 #
 
 cmake_minimum_required(VERSION 3.1)
-project(spdlog VERSION 1.0.1 LANGUAGES CXX)
+project(spdlog VERSION 1.1.0 LANGUAGES CXX)
 include(CTest)
 include(CMakeDependentOption)
 include(GNUInstallDirs)
@@ -28,6 +28,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     add_compile_options("-Wall")
     add_compile_options("-Wextra")
+    add_compile_options("-pedantic")
 endif()
 
 #---------------------------------------------------------------------------------------
