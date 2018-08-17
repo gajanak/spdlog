@@ -107,6 +107,36 @@ public:
     template<typename T>
     void critical(const T &msg);
 
+#ifdef SPDLOG_ENABLE_LOG_ATTRIBUTES
+    template <typename... Args> void log(level::level_enum lvl, attributes_type &ma, const char *fmt, const Args &... args);
+    template <typename... Args> void log(level::level_enum lvl, attributes_type &ma, const char *msg);
+    template <typename... Args> void trace(attributes_type &ma, const char *fmt, const Args &... args);
+    template <typename... Args> void debug(attributes_type &ma, const char *fmt, const Args &... args);
+    template <typename... Args> void info(attributes_type &ma, const char *fmt, const Args &... args);
+    template <typename... Args> void warn(attributes_type &ma, const char *fmt, const Args &... args);
+    template <typename... Args> void error(attributes_type &ma, const char *fmt, const Args &... args);
+    template <typename... Args> void critical(attributes_type &ma, const char *fmt, const Args &... args);
+
+#ifdef SPDLOG_WCHAR_TO_UTF8_SUPPORT
+    template <typename... Args> void log(level::level_enum lvl, attributes_type &ma, const wchar_t *msg);
+    template <typename... Args> void log(level::level_enum lvl, attributes_type &ma, const wchar_t *fmt, const Args &... args);
+    template <typename... Args> void trace(attributes_type &ma, const wchar_t *fmt, const Args &... args);
+    template <typename... Args> void debug(attributes_type &ma, const wchar_t *fmt, const Args &... args);
+    template <typename... Args> void info(attributes_type &ma, const wchar_t *fmt, const Args &... args);
+    template <typename... Args> void warn(attributes_type &ma, const wchar_t *fmt, const Args &... args);
+    template <typename... Args> void error(attributes_type &ma, const wchar_t *fmt, const Args &... args);
+    template <typename... Args> void critical(attributes_type &ma, const wchar_t *fmt, const Args &... args);
+#endif // SPDLOG_WCHAR_TO_UTF8_SUPPORT
+
+    template <typename T> void log(level::level_enum lvl, attributes_type &ma, const T &msg);
+    template <typename T> void trace(attributes_type &ma, const T &msg);
+    template <typename T> void debug(attributes_type &ma, const T &msg);
+    template <typename T> void info(attributes_type &ma, const T &msg);
+    template <typename T> void warn(attributes_type &ma, const T &msg);
+    template <typename T> void error(attributes_type &ma, const T &msg);
+    template <typename T> void critical(attributes_type &ma, const T &msg);
+#endif // SPDLOG_ENABLE_LOG_ATTRIBUTES
+
     bool should_log(level::level_enum msg_level) const;
     void set_level(level::level_enum log_level);
     level::level_enum level() const;

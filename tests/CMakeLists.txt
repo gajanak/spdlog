@@ -8,6 +8,7 @@ set(SPDLOG_UTESTS_SOURCES
     test_misc.cpp
     test_pattern_formatter.cpp
     test_async.cpp
+	test_log_attrs.cpp
     includes.h
     registry.cpp
     test_macros.cpp
