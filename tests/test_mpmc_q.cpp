@@ -1,12 +1,13 @@
 #include "includes.h"
 
 using namespace spdlog::chrono;
-using spdlog::chrono::milliseconds;
-using spdlog::chrono::system_clock;
+using spdlog::chrono::milliseconds; // TODO: useless by previos line ;)
+using test_clock = high_resolution_clock ;
 
-system_clock::time_point now_millis()
+
+static milliseconds millis_from(const test_clock::time_point &tp0)
 {
-    return time_point_cast<milliseconds>(system_clock::now());
+    return duration_cast<milliseconds>(test_clock::now()-tp0);
 }
 TEST_CASE("dequeue-empty-nowait", "[mpmc_blocking_q]")
 {
@@ -15,12 +16,13 @@ TEST_CASE("dequeue-empty-nowait", "[mpmc_blocking_q]")
     spdlog::details::mpmc_blocking_queue<int> q(q_size);
     int popped_item;
 
-    auto millis_0 = now_millis();
+    auto start = test_clock::now();
     auto rv = q.dequeue_for(popped_item, milliseconds::zero());
-    auto millis_1 = now_millis();
+    auto delta_ms = millis_from(start);
 
     REQUIRE(rv == false);
-    REQUIRE((millis_1 - millis_0) <= tolerance_wait);
+    INFO("Delta " << delta_ms.count() << " millis");
+    REQUIRE(delta_ms <= tolerance_wait);
 }
 
 TEST_CASE("dequeue-empty-wait", "[mpmc_blocking_q]")
@@ -28,16 +30,17 @@ TEST_CASE("dequeue-empty-wait", "[mpmc_blocking_q]")
 
     size_t q_size = 100;
     milliseconds wait_ms(250);
-    milliseconds tolerance_wait(10);
+    milliseconds tolerance_wait(100);
 
     spdlog::details::mpmc_blocking_queue<int> q(q_size);
     int popped_item;
-    auto millis_0 = now_millis();
+    auto start = test_clock::now();
     auto rv = q.dequeue_for(popped_item, wait_ms);
-    auto millis_1 = now_millis();
-    auto delta_ms = millis_1 - millis_0;
+    auto delta_ms = millis_from(start);
 
     REQUIRE(rv == false);
+
+    INFO("Delta " << delta_ms.count() << " millis");
     REQUIRE(delta_ms >= wait_ms);
     REQUIRE(delta_ms <= wait_ms + tolerance_wait);
 }
@@ -52,10 +55,12 @@ TEST_CASE("enqueue_nowait", "[mpmc_blocking_q]")
     q.enqueue(1);
     REQUIRE(q.overrun_counter() == 0U);
 
-    auto millis_0 = now_millis();
+    auto start = test_clock::now();
     q.enqueue_nowait(2);
-    auto millis_1 = now_millis();
-    REQUIRE((millis_1 - millis_0) <= tolerance_wait);
+    auto delta_ms = millis_from(start);
+
+    INFO("Delta " << delta_ms.count() << " millis");
+    REQUIRE(delta_ms <= tolerance_wait);
     REQUIRE(q.overrun_counter() == 1U);
 }
 
