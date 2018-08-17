@@ -1,8 +1,8 @@
 #include "includes.h"
 
-using namespace std::chrono;
-using std::chrono::milliseconds;
-using std::chrono::system_clock;
+using namespace spdlog::chrono;
+using spdlog::chrono::milliseconds;
+using spdlog::chrono::system_clock;
 
 system_clock::time_point now_millis()
 {
@@ -50,13 +50,13 @@ TEST_CASE("enqueue_nowait", "[mpmc_blocking_q]")
     milliseconds tolerance_wait(10);
 
     q.enqueue(1);
-    REQUIRE(q.overrun_counter() == 0);
+    REQUIRE(q.overrun_counter() == 0U);
 
     auto millis_0 = now_millis();
     q.enqueue_nowait(2);
     auto millis_1 = now_millis();
     REQUIRE((millis_1 - millis_0) <= tolerance_wait);
-    REQUIRE(q.overrun_counter() == 1);
+    REQUIRE(q.overrun_counter() == 1U);
 }
 
 TEST_CASE("bad_queue", "[mpmc_blocking_q]")
@@ -64,7 +64,7 @@ TEST_CASE("bad_queue", "[mpmc_blocking_q]")
     size_t q_size = 0;
     spdlog::details::mpmc_blocking_queue<int> q(q_size);
     q.enqueue_nowait(1);
-    REQUIRE(q.overrun_counter() == 1);
+    REQUIRE(q.overrun_counter() == 1U);
     int i;
     REQUIRE(q.dequeue_for(i, milliseconds(0)) == false);
 }
@@ -87,7 +87,7 @@ TEST_CASE("full_queue", "[mpmc_blocking_q]")
     }
 
     q.enqueue_nowait(123456);
-    REQUIRE(q.overrun_counter() == 1);
+    REQUIRE(q.overrun_counter() == 1U);
 
     for (int i = 1; i < static_cast<int>(q_size); i++)
     {

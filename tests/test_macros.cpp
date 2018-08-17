@@ -18,7 +18,7 @@ TEST_CASE("debug and trace w/o format string", "[macros]]")
     logger->flush();
 
     REQUIRE(ends_with(file_contents(filename), "Test message 2\n"));
-    REQUIRE(count_lines(filename) == 2);
+    REQUIRE(count_lines(filename) == 2U);
 }
 
 TEST_CASE("debug and trace with format strings", "[macros]]")
@@ -36,5 +36,5 @@ TEST_CASE("debug and trace with format strings", "[macros]]")
     logger->flush();
 
     REQUIRE(ends_with(file_contents(filename), "Test message 222\n"));
-    REQUIRE(count_lines(filename) == 2);
+    REQUIRE(count_lines(filename) == 2U);
 }

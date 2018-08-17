@@ -16,7 +16,7 @@ TEST_CASE("simple_file_logger", "[simple_logger]]")
 
     logger->flush();
     REQUIRE(file_contents(filename) == std::string("Test message 1\nTest message 2\n"));
-    REQUIRE(count_lines(filename) == 2);
+    REQUIRE(count_lines(filename) == 2U);
 }
 
 TEST_CASE("flush_on", "[flush_on]]")
@@ -29,13 +29,13 @@ TEST_CASE("flush_on", "[flush_on]]")
     logger->set_level(spdlog::level::trace);
     logger->flush_on(spdlog::level::info);
     logger->trace("Should not be flushed");
-    REQUIRE(count_lines(filename) == 0);
+    REQUIRE(count_lines(filename) == 0U);
 
     logger->info("Test message {}", 1);
     logger->info("Test message {}", 2);
 
     REQUIRE(file_contents(filename) == std::string("Should not be flushed\nTest message 1\nTest message 2\n"));
-    REQUIRE(count_lines(filename) == 3);
+    REQUIRE(count_lines(filename) == 3U);
 }
 
 TEST_CASE("rotating_file_logger1", "[rotating_logger]]")
@@ -52,7 +52,7 @@ TEST_CASE("rotating_file_logger1", "[rotating_logger]]")
 
     logger->flush();
     auto filename = basename;
-    REQUIRE(count_lines(filename) == 10);
+    REQUIRE(count_lines(filename) == 10U);
 }
 
 TEST_CASE("rotating_file_logger2", "[rotating_logger]]")
@@ -66,7 +66,7 @@ TEST_CASE("rotating_file_logger2", "[rotating_logger]]")
 
     logger->flush();
     auto filename = basename;
-    REQUIRE(count_lines(filename) == 10);
+    REQUIRE(count_lines(filename) == 10U);
     for (int i = 0; i < 1000; i++)
     {
 
@@ -98,7 +98,7 @@ TEST_CASE("daily_logger with dateonly calculator", "[daily_logger_dateonly]]")
     }
     logger->flush();
     auto filename = fmt::to_string(w);
-    REQUIRE(count_lines(filename) == 10);
+    REQUIRE(count_lines(filename) == 10U);
 }
 
 struct custom_daily_file_name_calculator
@@ -130,7 +130,7 @@ TEST_CASE("daily_logger with custom calculator", "[daily_logger_custom]]")
 
     logger->flush();
     auto filename = fmt::to_string(w);
-    REQUIRE(count_lines(filename) == 10);
+    REQUIRE(count_lines(filename) == 10U);
 }
 
 /*

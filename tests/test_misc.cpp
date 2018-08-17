@@ -87,7 +87,7 @@ TEST_CASE("periodic flush", "[periodic_flush]")
 
     spdlog::flush_every(spdlog::chrono::seconds(1));
     spdlog::details::os::sleep_for_millis(1100);
-    REQUIRE(test_sink->flush_counter() == 1);
+    REQUIRE(test_sink->flush_counter() == 1U);
     spdlog::flush_every(spdlog::chrono::seconds(0));
     spdlog::drop_all();
 }

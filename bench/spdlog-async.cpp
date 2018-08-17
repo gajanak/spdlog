@@ -17,7 +17,7 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    using namespace std::chrono;
+    using namespace spdlog::chrono;
     using clock = steady_clock;
 
     int thread_count = 10;

@@ -34,7 +34,7 @@ TEST_CASE("file_helper_size", "[file_helper::size()]]")
         file_helper helper;
         helper.open(target_filename);
         write_with_helper(helper, expected_size);
-        REQUIRE(static_cast<size_t>(helper.size()) == expected_size);
+        REQUIRE( helper.size() == expected_size);
     }
     REQUIRE(get_filesize(target_filename) == expected_size);
 }
@@ -54,9 +54,9 @@ TEST_CASE("file_helper_reopen", "[file_helper::reopen()]]")
     file_helper helper;
     helper.open(target_filename);
     write_with_helper(helper, 12);
-    REQUIRE(helper.size() == 12);
+    REQUIRE(helper.size() == 12U);
     helper.reopen(true);
-    REQUIRE(helper.size() == 0);
+    REQUIRE(helper.size() == 0U);
 }
 
 TEST_CASE("file_helper_reopen2", "[file_helper::reopen(false)]]")

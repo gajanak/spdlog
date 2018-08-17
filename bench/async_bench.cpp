@@ -18,16 +18,16 @@
 #include <thread>
 
 using namespace std;
-using namespace std::chrono;
+using namespace spdlog::chrono;
 using namespace spdlog;
 using namespace spdlog::sinks;
 using namespace utils;
 
 void bench_mt(int howmany, std::shared_ptr<spdlog::logger> log, int thread_count);
 
-int count_lines(const char *filename)
+size_t count_lines(const char *filename)
 {
-    int counter = 0;
+    size_t counter = 0;
     auto *infile = fopen(filename, "r");
     int ch;
     while (EOF != (ch = getc(infile)))
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
             bench_mt(howmany, std::move(logger), threads);
             auto count = count_lines(filename);
 
-            if (count != howmany)
+            if (count != static_cast<size_t>(howmany))
             {
                 console->error("Test failed. {} has {:n} lines instead of {:n}", filename, count, howmany);
                 exit(1);

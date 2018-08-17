@@ -35,7 +35,7 @@ TEST_CASE("default_error_handler", "[errors]]")
     logger->flush();
 
     REQUIRE(file_contents(filename) == std::string("Test message 2\n"));
-    REQUIRE(count_lines(filename) == 1);
+    REQUIRE(count_lines(filename) == 1U);
 }
 
 struct custom_ex
@@ -52,7 +52,7 @@ TEST_CASE("custom_error_handler", "[errors]]")
 
     REQUIRE_THROWS_AS(logger->info("Bad format msg {} {}", "xxx"), custom_ex);
     logger->info("Good message #2");
-    REQUIRE(count_lines(filename) == 2);
+    REQUIRE(count_lines(filename) == 2U);
 }
 
 TEST_CASE("default_error_handler2", "[errors]]")
@@ -92,7 +92,7 @@ TEST_CASE("async_error_handler", "[errors]]")
         spdlog::drop("logger"); // force logger to drain the queue and shutdown
     }
     spdlog::init_thread_pool(128, 1);
-    REQUIRE(count_lines(filename) == 2);
+    REQUIRE(count_lines(filename) == 2U);
     REQUIRE(file_contents("logs/custom_err.txt") == err_msg);
 }
 
