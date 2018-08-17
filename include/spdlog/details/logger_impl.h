@@ -350,17 +350,17 @@ inline void spdlog::logger::log(level::level_enum lvl, attributes_type &attrs, c
     if (!should_log(lvl)) return;
     try
     {
-        details::log_msg log_msg(&_name, lvl, std::move(attrs));
+        details::log_msg log_msg(&name_, lvl, std::move(attrs));
         log_msg.raw << msg;
-        _sink_it(log_msg);
+        sink_it_(log_msg);
     }
     catch (const std::exception &ex)
     {
-        _err_handler(ex.what());
+        err_handler_(ex.what());
     }
     catch (...)
     {
-        _err_handler("Unknown exception in logger " + _name);
+        err_handler_("Unknown exception in logger " + name_);
         throw;
     }
 }
@@ -372,22 +372,19 @@ inline void spdlog::logger::log(level::level_enum lvl, attributes_type &attrs, c
 
     try
     {
-        details::log_msg log_msg(&_name, lvl, std::move(attrs));
+        details::log_msg log_msg(&name_, lvl, std::move(attrs));
 
-#if defined(SPDLOG_FMT_PRINTF)
-        fmt::printf(log_msg.raw, fmt, args...);
-#else
-        log_msg.raw.write(fmt, args...);
-#endif
-        _sink_it(log_msg);
+        fmt::format_to(log_msg.raw, fmt, args...);
+        //log_msg.raw.write(fmt, args...);
+        sink_it_(log_msg);
     }
     catch (const std::exception &ex)
     {
-        _err_handler(ex.what());
+        err_handler_(ex.what());
     }
     catch(...)
     {
-        _err_handler("Unknown exception in logger " + _name);
+        err_handler_("Unknown exception in logger " + name_);
         throw;
     }
 }
@@ -398,17 +395,17 @@ inline void spdlog::logger::log(level::level_enum lvl, attributes_type &attrs, c
     if (!should_log(lvl)) return;
     try
     {
-        details::log_msg log_msg(&_name, lvl, std::move(attrs));
-        log_msg.raw << msg;
-        _sink_it(log_msg);
+        details::log_msg log_msg(&name_, lvl, std::move(attrs));
+        fmt::format_to(log_msg.raw, "{}", msg);
+        sink_it_(log_msg);
     }
     catch (const std::exception &ex)
     {
-        _err_handler(ex.what());
+        err_handler_(ex.what());
     }
     catch (...)
     {
-        _err_handler("Unknown exception in logger " + _name);
+        err_handler_("Unknown exception in logger " + name_);
         throw;
     }
 }
